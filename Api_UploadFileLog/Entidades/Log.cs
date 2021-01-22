@@ -22,9 +22,9 @@ namespace Api_UploadFileLog.Entidades
 
 
         }
-        private long _id;
+        private int _id;
 
-        public long id { get => _id; private set => _id = value; }
+        public int id { get => _id; private set => _id = value; }
 
         private string _ip;
         public string ip { get => _ip ; private  set => _ip = value; }

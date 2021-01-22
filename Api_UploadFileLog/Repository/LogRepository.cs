@@ -12,6 +12,8 @@ namespace Api_UploadFileLog.Repository
     public class LogRepository
     {
         private readonly IConfiguration _configuration;
+        private string queryInsert = @"insert into log (ip,local,usuario,data,requisicao,status,time,origem,software)
+                              values(@ip,@local,@usuario,@data,@requisicao,@status,@time,@origem,@software)";
 
         public LogRepository(IConfiguration configuration)
         {
@@ -20,24 +22,54 @@ namespace Api_UploadFileLog.Repository
 
         public int Add(Log log)
         {
-            using (var con = new NpgsqlConnection(new BaseRepository(_configuration).GetConnection()))
+            var con = new NpgsqlConnection(new BaseRepository(_configuration).GetConnection());
+            try
             {
-                try
+                con.Open();
+                return con.Execute(queryInsert, log);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public int AddList(List<Log> listLog)
+        {
+            int result = 0;
+            var con = new NpgsqlConnection(new BaseRepository(_configuration).GetConnection());
+            con.Open();
+            NpgsqlTransaction transaction = con.BeginTransaction();
+            try
+            {
+
+                foreach (var log in listLog)
                 {
-                    con.Open();
-                    var query = @"insert into log (ip,local,usuario,data,requisicao,status,time,origem,software)
-                              values(@ip,@local,@usuario,@data,@requisicao,@status,@time,@origem,@software)";
-                    return con.Execute(query, log);
-                }
-                catch(Exception ex)
-                {
-                    throw ex;
-                }
-                finally
-                {
-                    con.Close();
+                    log.id = (Int64)con.ExecuteScalar(queryInsert + " RETURNING id", log);
+                    result++;
                 }
             }
+            catch (Exception e)
+            {
+                result = 0;
+                transaction.Rollback();
+            }
+            finally
+            {
+                if (result > 0)
+                {
+                    transaction.Commit();
+                }
+                transaction.Dispose();
+                con.Close();
+
+            }
+
+            return result;
         }
     }
 }

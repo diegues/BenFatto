@@ -7,7 +7,7 @@ namespace Api_UploadFileLog.Entidades
 {
     public class Log
     {
-        public Log(int id, string _ip, string _local, string _usuario, string _data, string _requisicao, int _status, int _time, string _origem, string _software)
+        public Log(Int64 id, string _ip, string _local, string _usuario, DateTime _data, string _requisicao, int? _status, int? _time, string _origem, string _software)
         {
             id = _id;
             ip = _ip;
@@ -22,9 +22,9 @@ namespace Api_UploadFileLog.Entidades
 
 
         }
-        private int _id;
+        private Int64 _id;
 
-        public int id { get => _id; private set => _id = value; }
+        public Int64 id { get => _id; set => _id = value; }
 
         private string _ip;
         public string ip { get => _ip ; private  set => _ip = value; }
@@ -35,17 +35,17 @@ namespace Api_UploadFileLog.Entidades
         private string _usuario;
         public string usuario { get => _usuario; private set => _usuario = value; }
 
-        private string _data;
-        public string data { get => _data; private set => _data = value; }
+        private DateTime _data;
+        public DateTime data { get => _data; private set => _data = value; }
 
         private string _requisicao;
         public string requisicao { get => _requisicao; private set => _requisicao = value; }
 
-        private int _status;
-        public int status { get => _status; private set => _status = value; }
+        private int? _status;
+        public int? status { get => _status; private set => _status = value; }
 
-        private int _time;
-        public int time { get => _time; private set => _time = value; }
+        private int? _time;
+        public int? time { get => _time; private set => _time = value; }
 
         private string _origem;
         public string origem { get => _origem; private set => _origem = value; }

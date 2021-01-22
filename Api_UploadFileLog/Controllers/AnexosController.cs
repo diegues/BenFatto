@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Api_UploadFileLog.Controllers
@@ -20,6 +22,27 @@ namespace Api_UploadFileLog.Controllers
         public AnexosController(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        private int? IntTryParseNullable(string val)
+        {
+            int outValue;
+            return int.TryParse(val, out outValue) ? (int?)outValue : null;
+        }
+
+        private DateTime ConvertDateTime(string date)
+        {
+            int day = Convert.ToInt32(date.Substring(0, 2));
+            int month = DateTime.ParseExact(date.Substring(3, 3), "MMM", CultureInfo.InvariantCulture).Month;
+            int year = Convert.ToInt32(date.Substring(7, 4));
+
+            int hour = Convert.ToInt32(Convert.ToInt32(date.Substring(12, 2)));
+            int minute = Convert.ToInt32(Convert.ToInt32(date.Substring(15, 2)));
+            int second = Convert.ToInt32(Convert.ToInt32(date.Substring(18, 2)));
+
+            DateTime dateConverted = new DateTime(year, month, day, hour, minute, second);
+
+            return dateConverted;
         }
 
         private string findData(int start, string caracter, ref string linha)
@@ -75,20 +98,20 @@ namespace Api_UploadFileLog.Controllers
                         string origem = findData(0, "\"", ref linha);
                         string software = findData(1, "\"", ref linha);
 
-
                         //Fazer Entidade
-                        Log log = new Log(0, ip, local, usuario, data, requisicao, int.Parse(status),int.Parse(time), origem, software);
-                        if(new LogRepository(_configuration).Add(log) > 1)
-                        {
-                            result = "Dados inseridos com sucesso!";
-                        }
-                        else
-                        {
-                            result = "Erro ao inserir dados.";
-                        }
-                        //lstlog.Add(log);
-                        //Salvar no banco
+                        Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+                        lstlog.Add(log);
                     }
+                }
+
+                if (new LogRepository(_configuration).AddList(lstlog) > 0)
+                {
+                    result = JsonSerializer.Serialize(lstlog);
+                }
+                else
+                {
+
+                    result = "Erro ao inserir dados.";
                 }
 
             }
@@ -98,7 +121,6 @@ namespace Api_UploadFileLog.Controllers
             }
 
             //Retornar Json
-            //return sb.ToString();
             return result;
         }
     }

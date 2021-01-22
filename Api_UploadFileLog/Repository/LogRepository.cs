@@ -13,7 +13,7 @@ namespace Api_UploadFileLog.Repository
     {
         private readonly IConfiguration _configuration;
         private string queryInsert = @"insert into log (ip,local,usuario,data,requisicao,status,time,origem,software)
-                              values(@ip,@local,@usuario,@data,@requisicao,@status,@time,@origem,@software)";
+                              values(@ip,@local,@usuario,@data,@requisicao,@status,@time,@origem,@software) RETURNING id";
 
         public LogRepository(IConfiguration configuration)
         {
@@ -49,7 +49,7 @@ namespace Api_UploadFileLog.Repository
 
                 foreach (var log in listLog)
                 {
-                    log.id = (Int64)con.ExecuteScalar(queryInsert + " RETURNING id", log);
+                    log.id = (Int64)con.ExecuteScalar(queryInsert, log);
                     result++;
                 }
             }

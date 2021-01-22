@@ -123,5 +123,33 @@ namespace Api_UploadFileLog.Controllers
             //Retornar Json
             return result;
         }
+
+
+        [HttpPost]
+        [Route("Insert")]
+        public string Insert(string ip, string local, string usuario, string data, string requisicao, string status, string time, string origem, string software )
+        {
+            var result = string.Empty;
+            try
+            {
+                //Entidade
+                Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+
+                if (new LogRepository(_configuration).Add(log) > 0)
+                {
+                    result = "Inserido com sucesso.";
+                }
+                else
+                {
+                    result = "Erro ao inserir dados.";
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return result;
+        }
     }
 }

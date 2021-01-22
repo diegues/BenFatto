@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Api_UploadFileLog.Entidades;
+using Api_UploadFileLog.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -50,6 +52,8 @@ namespace Api_UploadFileLog.Controllers
         public string PostFile(IFormFile file)
         {
             var sb = new StringBuilder();
+            var lstlog = new List<Log>();
+            var result = string.Empty;
 
             try
             {
@@ -60,12 +64,10 @@ namespace Api_UploadFileLog.Controllers
                         sb.Clear();
                         sb.AppendLine(reader.ReadLine());
 
-                        //Fazer Entidade
-
                         string linha = sb.ToString();
                         string ip = findData(0, " ", ref linha);
                         string local = findData(0, " ", ref linha);
-                        string user = findData(0, "[", ref linha);
+                        string usuario = findData(0, "[", ref linha);
                         string data = findData(0, "]", ref linha);
                         string requisicao = findData(1, "\"", ref linha);
                         string status = findData(0, " ", ref linha);
@@ -73,9 +75,22 @@ namespace Api_UploadFileLog.Controllers
                         string origem = findData(0, "\"", ref linha);
                         string software = findData(1, "\"", ref linha);
 
+
+                        //Fazer Entidade
+                        Log log = new Log(0, ip, local, usuario, data, requisicao, int.Parse(status),int.Parse(time), origem, software);
+                        if(new LogRepository(_configuration).Add(log) > 1)
+                        {
+                            result = "Dados inseridos com sucesso!";
+                        }
+                        else
+                        {
+                            result = "Erro ao inserir dados.";
+                        }
+                        //lstlog.Add(log);
                         //Salvar no banco
                     }
                 }
+
             }
             catch (Exception exc)
             {
@@ -83,7 +98,8 @@ namespace Api_UploadFileLog.Controllers
             }
 
             //Retornar Json
-            return sb.ToString();
+            //return sb.ToString();
+            return result;
         }
     }
 }

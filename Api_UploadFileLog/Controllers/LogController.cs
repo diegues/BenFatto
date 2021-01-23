@@ -64,7 +64,7 @@ namespace Api_UploadFileLog.Controllers
         public IActionResult PostCreateLog([FromBody] LogModel logModel)
         {
             var result = string.Empty;
-            Log log = new Log(0, logModel.ip, logModel.local, logModel.usuario, ConvertDateTime(logModel.data), ConvertTimeZone(logModel.data), logModel.requisicao, IntTryParseNullable(logModel.status), IntTryParseNullable(logModel.time), logModel.origem, logModel.software);
+            Log log = new Log(0, logModel.ip, logModel.local, logModel.usuario, ConvertDateTime(logModel.data), logModel.zone, logModel.requisicao, IntTryParseNullable(logModel.status), IntTryParseNullable(logModel.time), logModel.origem, logModel.software);
             if (new LogRepository(_configuration).Add(log) > 0)
             {
                 result = "Inserido com sucesso.";

@@ -14,7 +14,7 @@ namespace Api_UploadFileLog.Entidades
 
         public string data { get; set; }
         public string zone { get; set; }
-        public string requisicao { get; private set; }
+        public string requisicao { get; set; }
 
         public string status { get; set;}
 

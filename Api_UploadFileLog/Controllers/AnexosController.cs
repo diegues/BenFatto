@@ -9,7 +9,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace Api_UploadFileLog.Controllers
@@ -65,7 +67,11 @@ namespace Api_UploadFileLog.Controllers
 
                 if (new LogRepository(_configuration).AddList(lstlog) > 0)
                 {
-                    result = JsonSerializer.Serialize(lstlog);
+                    result = JsonSerializer.Serialize(lstlog, new JsonSerializerOptions
+                    {
+                        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                        WriteIndented = true
+                    });
                 }
                 else
                 {

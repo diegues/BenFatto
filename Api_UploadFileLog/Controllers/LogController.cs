@@ -3,6 +3,10 @@ using Api_UploadFileLog.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace Api_UploadFileLog.Controllers
 {
@@ -74,6 +78,35 @@ namespace Api_UploadFileLog.Controllers
                 result = "Erro ao inserir dados.";
             }
             return Json(logModel);
+        }
+
+        [HttpPost]
+        [Route("SelectFields")]
+        public string SelectFields(string id = null, string ip = null, string local = null, string usuario = null, string data = null, string zone = null, string requisicao = null, string status = null, string time = null, string origem = null, string software = null)
+        {
+            var result = string.Empty;
+            try
+            {
+                DateTime dataF = new DateTime();
+                if (data != null)
+                    dataF = ConvertDateTime(data);
+
+                //Entidade
+                Log log = new Log(Convert.ToInt64(id), ip, local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+                List<LogModel> logRetorn = new LogRepository(_configuration).SelectWithParameters(log);
+
+                result = JsonSerializer.Serialize(logRetorn, new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                    WriteIndented = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception(ex.ToString()));
+            }
+
+            return result;
         }
     }
 }

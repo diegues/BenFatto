@@ -54,7 +54,7 @@ namespace Api_UploadFileLog.Controllers
                 value = linha.Substring(0, index);
                 linha = linha.Substring(value.Length + cont).Trim();
             }
-            return value.Trim();
+            return value.Trim().Equals("-") ? null : value.Trim();
         }
     }
 }

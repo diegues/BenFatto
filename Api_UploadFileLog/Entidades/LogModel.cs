@@ -7,6 +7,7 @@ namespace Api_UploadFileLog.Entidades
 {
     public class LogModel
     {
+        public string id { get; set; }
         public string ip { get; set; }
         public string local { get; set; }
 

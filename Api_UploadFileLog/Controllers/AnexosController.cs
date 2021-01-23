@@ -80,12 +80,5 @@ namespace Api_UploadFileLog.Controllers
 
             return result;
         }
-
-        [HttpPost]
-        [Route("CreateLog")]
-        public IActionResult PostCreateLog([FromBody] LogModel logModel)
-        {
-            return Json(logModel);
-        }
     }
 }

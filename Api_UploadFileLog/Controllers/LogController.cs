@@ -17,7 +17,7 @@ namespace Api_UploadFileLog.Controllers
         }
 
         /// <summary>
-        /// Insert Log 
+        /// Insert Log por parametros
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="local"></param>
@@ -31,13 +31,13 @@ namespace Api_UploadFileLog.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Insert")]
-        public string Insert(string ip, string local, string usuario, string data, string requisicao, string status, string time, string origem, string software)
+        public string Insert(string ip, string local, string usuario, string data, string zone, string requisicao, string status, string time, string origem, string software)
         {
             var result = string.Empty;
             try
             {
                 //Entidade
-                Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), ConvertTimeZone(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+                Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
 
                 if (new LogRepository(_configuration).Add(log) > 0)
                 {
@@ -56,31 +56,24 @@ namespace Api_UploadFileLog.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Insert Log por Model
+        /// </summary>
         [HttpPost]
-        [Route("InsertJson")]
-        public string InsertJson(Log log)
+        [Route("CreateLog")]
+        public IActionResult PostCreateLog([FromBody] LogModel logModel)
         {
             var result = string.Empty;
-            try
+            Log log = new Log(0, logModel.ip, logModel.local, logModel.usuario, ConvertDateTime(logModel.data), ConvertTimeZone(logModel.data), logModel.requisicao, logModel.status, logModel.time, logModel.origem, logModel.software);
+            if (new LogRepository(_configuration).Add(log) > 0)
             {
-                //Entidade
-                //Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
-
-                //if (new LogRepository(_configuration).Add(log) > 0)
-                //{
-                //    result = "Inserido com sucesso.";
-                //}
-                //else
-                //{
-                //    result = "Erro ao inserir dados.";
-                //}
+                result = "Inserido com sucesso.";
             }
-            catch (Exception ex)
+            else
             {
-                throw (new Exception(ex.ToString()));
+                result = "Erro ao inserir dados.";
             }
-
-            return result;
+            return Json(logModel);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Api_UploadFileLog.Controllers
 {
-    public class BaseController : ControllerBase
+    public class BaseController : Controller
     {
         protected int? IntTryParseNullable(string val)
         {

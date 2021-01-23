@@ -13,8 +13,8 @@ namespace Api_UploadFileLog.Repository
     public class LogRepository
     {
         private readonly IConfiguration _configuration;
-        private string queryInsert = @"insert into log (ip,local,usuario,data,requisicao,status,time,origem,software)
-                              values(@ip,@local,@usuario,@data,@requisicao,@status,@time,@origem,@software)";
+        private string queryInsert = @"insert into log (ip,local,usuario,data,zone,requisicao,status,time,origem,software)
+                              values(@ip,@local,@usuario,@data,@zone,@requisicao,@status,@time,@origem,@software)";
         NpgsqlConnection con;
 
         public LogRepository(IConfiguration configuration)
@@ -42,6 +42,7 @@ namespace Api_UploadFileLog.Repository
 
         public int AddList(List<Log> listLog)
         {
+            List<Log> lst = listLog.Where(x => x.zone == null).Select(x => x).ToList();
             int result = 1;
             try
             {

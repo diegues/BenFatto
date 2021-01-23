@@ -16,7 +16,7 @@ namespace Api_UploadFileLog.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnexosController : ControllerBase
+    public class AnexosController : Controller
     {
         private readonly IConfiguration _configuration;
         public AnexosController(IConfiguration configuration)
@@ -193,6 +193,13 @@ namespace Api_UploadFileLog.Controllers
             }
 
             return result;
+        }
+
+        [HttpPost]
+        [Route("CreateLog")]
+        public IActionResult PostCreateLog([FromBody] LogModel logModel)
+        {
+            return Json(logModel);
         }
     }
 }

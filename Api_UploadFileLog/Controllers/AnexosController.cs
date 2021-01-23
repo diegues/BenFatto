@@ -70,6 +70,11 @@ namespace Api_UploadFileLog.Controllers
             return value.Trim();
         }
 
+        /// <summary>
+        /// Upload File log
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UploadFile")]
         public string PostFile(IFormFile file)
@@ -124,7 +129,19 @@ namespace Api_UploadFileLog.Controllers
             return result;
         }
 
-
+        /// <summary>
+        /// Insert Log 
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="local"></param>
+        /// <param name="usuario"></param>
+        /// <param name="data"></param>
+        /// <param name="requisicao"></param>
+        /// <param name="status"></param>
+        /// <param name="time"></param>
+        /// <param name="origem"></param>
+        /// <param name="software"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Insert")]
         public string Insert(string ip, string local, string usuario, string data, string requisicao, string status, string time, string origem, string software )
@@ -146,7 +163,7 @@ namespace Api_UploadFileLog.Controllers
             }
             catch (Exception ex)
             {
-
+                throw (new Exception(ex.ToString()));
             }
 
             return result;

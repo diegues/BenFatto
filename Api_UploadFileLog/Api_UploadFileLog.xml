@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Api_UploadFileLog</name>
+    </assembly>
+    <members>
+        <member name="M:Api_UploadFileLog.Controllers.AnexosController.PostFile(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Upload File log
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Api_UploadFileLog.Controllers.AnexosController.Insert(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Insert Log 
+            </summary>
+            <param name="ip"></param>
+            <param name="local"></param>
+            <param name="usuario"></param>
+            <param name="data"></param>
+            <param name="requisicao"></param>
+            <param name="status"></param>
+            <param name="time"></param>
+            <param name="origem"></param>
+            <param name="software"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

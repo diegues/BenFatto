@@ -7,13 +7,14 @@ namespace Api_UploadFileLog.Entidades
 {
     public class Log
     {
-        public Log(Int64 id, string _ip, string _local, string _usuario, DateTime _data, string _requisicao, int? _status, int? _time, string _origem, string _software)
+        public Log(Int64 id, string _ip, string _local, string _usuario, DateTime _data, string zone, string _requisicao, int? _status, int? _time, string _origem, string _software)
         {
             id = _id;
             ip = _ip;
             local = _local;
             usuario = _usuario;
             data = _data;
+            zone = _zone;
             requisicao = _requisicao;
             status = _status;
             time = _time;
@@ -40,6 +41,9 @@ namespace Api_UploadFileLog.Entidades
 
         private string _requisicao;
         public string requisicao { get => _requisicao; private set => _requisicao = value; }
+
+        private string _zone;
+        public string zone { get => _zone; private set => _zone = value; }
 
         private int? _status;
         public int? status { get => _status; private set => _status = value; }

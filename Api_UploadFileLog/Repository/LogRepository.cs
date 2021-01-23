@@ -42,7 +42,6 @@ namespace Api_UploadFileLog.Repository
 
         public int AddList(List<Log> listLog)
         {
-            List<Log> lst = listLog.Where(x => x.zone == null).Select(x => x).ToList();
             int result = 1;
             try
             {

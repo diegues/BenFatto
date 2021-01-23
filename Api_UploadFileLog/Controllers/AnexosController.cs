@@ -115,7 +115,6 @@ namespace Api_UploadFileLog.Controllers
                 }
                 else
                 {
-
                     result = "Erro ao inserir dados.";
                 }
 
@@ -160,6 +159,33 @@ namespace Api_UploadFileLog.Controllers
                 {
                     result = "Erro ao inserir dados.";
                 }
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception(ex.ToString()));
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        [Route("InsertJson")]
+        public string InsertJson(Log log)
+        {
+            var result = string.Empty;
+            try
+            {
+                //Entidade
+                //Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+
+                //if (new LogRepository(_configuration).Add(log) > 0)
+                //{
+                //    result = "Inserido com sucesso.";
+                //}
+                //else
+                //{
+                //    result = "Erro ao inserir dados.";
+                //}
             }
             catch (Exception ex)
             {

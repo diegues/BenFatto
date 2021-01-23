@@ -20,8 +20,6 @@ namespace Api_UploadFileLog.Entidades
             time = _time;
             origem = _origem;
             software = _software;
-
-
         }
         private Int64 _id;
 

@@ -75,19 +75,34 @@ namespace Api_UploadFileLog.Controllers
         /// </summary>
         [HttpPost]
         [Route("CreateLog")]
-        public IActionResult PostCreateLog([FromBody] LogModel logModel)
+        public string PostCreateLog([FromBody] LogModel log)
         {
             var result = string.Empty;
-            Log log = new Log(0, logModel.ip, logModel.local, logModel.usuario, ConvertDateTime(logModel.data), logModel.zone, logModel.requisicao, IntTryParseNullable(logModel.status), IntTryParseNullable(logModel.time), logModel.origem, logModel.software);
-            if (_logRepository.Add(log) > 0)
+            try
             {
-                result = "Inserido com sucesso.";
+                Log logModel = new Log(0, log.ip, log.local, log.usuario, ConvertDateTime(log.data), log.zone, log.requisicao, IntTryParseNullable(log.status), IntTryParseNullable(log.time), log.origem, log.software);
+                if (_logRepository.Add(logModel) > 0)
+                {
+                    result = "Inserido com sucesso.";
+                }
+                else
+                {
+                    result = "Erro ao inserir dados.";
+                }
             }
-            else
+            catch (ArgumentException ex)
             {
-                result = "Erro ao inserir dados.";
+                result = ex.Message;
             }
-            return Json(logModel);
+            catch (DataException ex)
+            {
+                result = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception(ex.ToString()));
+            }
+            return result;
         }
 
         [HttpPost]
@@ -101,9 +116,20 @@ namespace Api_UploadFileLog.Controllers
                 if (data != null)
                     dataF = ConvertDateTime(data);
 
+                Int64 outValue;
+                if (!Int64.TryParse(id, out outValue))
+                {
+                    throw new ArgumentException("Id inválido!");
+                }
+
                 //Entidade
                 Log log = new Log(Convert.ToInt64(id), ip, local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
                 List<LogModel> logRetorn = _logRepository.SelectWithParameters(log);
+
+                if(logRetorn == null || logRetorn.Count == 0)
+                {
+                    throw new ArgumentException("Sem dados para exibir!");
+                }
 
                 result = JsonSerializer.Serialize(logRetorn, new JsonSerializerOptions
                 {
@@ -111,9 +137,13 @@ namespace Api_UploadFileLog.Controllers
                     WriteIndented = true
                 });
             }
+            catch (ArgumentException ex)
+            {
+                result = ex.Message;
+            }
             catch (Exception ex)
             {
-                throw (new Exception(ex.ToString()));
+                result = ex.Message.ToString();
             }
 
             return result;

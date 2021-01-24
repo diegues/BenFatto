@@ -11,33 +11,31 @@ using System.Threading.Tasks;
 
 namespace Api_UploadFileLog.Repository
 {
-    public class LogRepository
+    public class LogRepository : ILogRepository
     {
-        private readonly IConfiguration _configuration;
+        private readonly IDbConnectionWrapper _con;
         private string queryInsert = @"insert into log (ip,local,usuario,data,zone,requisicao,status,time,origem,software)
                               values(@ip,@local,@usuario,@data,@zone,@requisicao,@status,@time,@origem,@software)";
-        NpgsqlConnection con;
-
-        public LogRepository(IConfiguration configuration)
+        
+        public LogRepository(IDbConnectionWrapper con)
         {
-            _configuration = configuration;
-            con = new NpgsqlConnection(new BaseRepository(_configuration).GetConnection());
+            _con = con;
         }
 
         public int Add(Log log)
         {
             try
             {
-                if(con.State == ConnectionState.Closed) con.Open();
-                return con.Execute(queryInsert, log);
+                if(_con.State == ConnectionState.Closed) _con.Open();
+                return _con.Execute(queryInsert, log);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return 0;
+                throw new DataException("Erro ao inserir dados.");
             }
             finally
             {
-                con.Close();
+                _con.Close();
             }
         }
 
@@ -46,8 +44,8 @@ namespace Api_UploadFileLog.Repository
             int result = 1;
             try
             {
-                if (con.State == ConnectionState.Closed) con.Open();
-                var affectedRows = con.Execute(queryInsert, listLog);
+                if (_con.State == ConnectionState.Closed) _con.Open();
+                var affectedRows = _con.Execute(queryInsert, listLog);
                 result = affectedRows;
             }
             catch (Exception e)
@@ -56,7 +54,7 @@ namespace Api_UploadFileLog.Repository
         }
             finally
             {
-                con.Close();
+                _con.Close();
             }
 
             return result;
@@ -67,7 +65,7 @@ namespace Api_UploadFileLog.Repository
             List<LogModel> result = new List<LogModel>();
             try
             {
-                if (con.State == ConnectionState.Closed) con.Open();
+                if (_con.State == ConnectionState.Closed) _con.Open();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append(" SELECT * FROM log t WHERE 1 = 1");
@@ -127,15 +125,15 @@ namespace Api_UploadFileLog.Repository
                 }
 
                 var sqlString = sb.ToString();
-                result = con.Query<LogModel>(sqlString, log).ToList();
+                result = _con.Query<LogModel>(sqlString, log).ToList();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
             finally
             {
-                con.Close();
+                _con.Close();
             }
 
             return result;

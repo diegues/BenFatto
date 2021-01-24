@@ -7,8 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -38,6 +40,15 @@ namespace Api_UploadFileLog
             });
 
             services.AddControllers();
+
+            services.AddSingleton<IDbConnection>(context =>
+            {
+                IConfiguration configuracao = context.GetRequiredService<IConfiguration>();
+                string databaseConnection = configuracao.GetSection("ConnectionStrings").GetSection("DatabaseConnection").Value;
+                return new NpgsqlConnection(databaseConnection);
+            });
+            services.AddSingleton<IDbConnectionWrapper, DbConnectionWrapper>();
+            services.AddSingleton<ILogRepository, LogRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

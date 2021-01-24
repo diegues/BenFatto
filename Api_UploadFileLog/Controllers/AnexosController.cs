@@ -20,11 +20,12 @@ namespace Api_UploadFileLog.Controllers
     [ApiController]
     public class AnexosController : BaseController
     {
-        private readonly IConfiguration _configuration;
-        public AnexosController(IConfiguration configuration)
+        private readonly ILogRepository _logRepository;
+        public AnexosController(ILogRepository logRepository)
         {
-            _configuration = configuration;
+            _logRepository = logRepository;
         }
+
 
         /// <summary>
         /// Upload File log
@@ -65,7 +66,7 @@ namespace Api_UploadFileLog.Controllers
                     }
                 }
 
-                if (new LogRepository(_configuration).AddList(lstlog) > 0)
+                if (_logRepository.AddList(lstlog) > 0)
                 {
                     result = JsonSerializer.Serialize(lstlog, new JsonSerializerOptions
                     {

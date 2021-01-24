@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -14,10 +15,11 @@ namespace Api_UploadFileLog.Controllers
     [ApiController]
     public class LogController : BaseController
     {
-        private readonly IConfiguration _configuration;
-        public LogController(IConfiguration configuration)
+        private readonly ILogRepository _logRepository;
+
+        public LogController(ILogRepository logRepository)
         {
-            _configuration = configuration;
+            _logRepository = logRepository;
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace Api_UploadFileLog.Controllers
                 //Entidade
                 Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
 
-                if (new LogRepository(_configuration).Add(log) > 0)
+                if (_logRepository.Add(log) > 0)
                 {
                     result = "Inserido com sucesso.";
                 }
@@ -51,6 +53,14 @@ namespace Api_UploadFileLog.Controllers
                 {
                     result = "Erro ao inserir dados.";
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                result = ex.Message;
+            }
+            catch (DataException ex)
+            {
+                result = ex.Message;
             }
             catch (Exception ex)
             {
@@ -69,7 +79,7 @@ namespace Api_UploadFileLog.Controllers
         {
             var result = string.Empty;
             Log log = new Log(0, logModel.ip, logModel.local, logModel.usuario, ConvertDateTime(logModel.data), logModel.zone, logModel.requisicao, IntTryParseNullable(logModel.status), IntTryParseNullable(logModel.time), logModel.origem, logModel.software);
-            if (new LogRepository(_configuration).Add(log) > 0)
+            if (_logRepository.Add(log) > 0)
             {
                 result = "Inserido com sucesso.";
             }
@@ -93,7 +103,7 @@ namespace Api_UploadFileLog.Controllers
 
                 //Entidade
                 Log log = new Log(Convert.ToInt64(id), ip, local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
-                List<LogModel> logRetorn = new LogRepository(_configuration).SelectWithParameters(log);
+                List<LogModel> logRetorn = _logRepository.SelectWithParameters(log);
 
                 result = JsonSerializer.Serialize(logRetorn, new JsonSerializerOptions
                 {

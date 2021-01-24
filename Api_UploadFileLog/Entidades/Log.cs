@@ -7,6 +7,10 @@ namespace Api_UploadFileLog.Entidades
 {
     public class Log
     {
+        public Log()
+        {
+        }
+
         public Log(Int64 _id, string _ip, string _local, string _usuario, DateTime _data, string _zone, string _requisicao, int? _status, int? _time, string _origem, string _software)
         {
             id = _id;

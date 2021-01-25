@@ -14,10 +14,16 @@ namespace Api_UploadFileLog.Controllers
             return int.TryParse(val, out outValue) ? (int?)outValue : null;
         }
 
-        protected bool ipAddressValido(string ip)
+        protected string ipAddressValido(string ip)
         {
-            IPAddress outValue;
-            return IPAddress.TryParse(ip, out outValue);
+            try
+            {
+                return IPAddress.Parse(ip).ToString();
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Ip inválido!");
+            }
         }
 
         protected DateTime ConvertDateTime(string date)

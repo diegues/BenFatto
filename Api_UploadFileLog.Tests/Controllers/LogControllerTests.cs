@@ -106,7 +106,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 m.Add(It.Is<Log>(l => l.status == null)),
                 Times.Never());
         }
-        
+
         [TestMethod]
         public void Insert_DeveInserirStatusNulo_QuandoStatusEInvalido()
         {
@@ -252,7 +252,7 @@ namespace Api_UploadFileLog.Tests.Controllers
         public void PostCreateLog_DeveCriarLogObjetoCorretamente_QuandoNaoHaErrosDeValidacao()
         {
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -269,7 +269,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l =>
-                l.ip == "ip" &&
+                l.ip == "127.0.0.1" &&
                 l.local == "local" &&
                 l.usuario == "usuario" &&
                 l.data == DateTime.Parse("24/Jan/2021 16:00:00") &&
@@ -288,7 +288,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "data invalida";
@@ -314,7 +314,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -337,7 +337,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -361,7 +361,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             _logRepositoryMock.Setup(m => m.Add(It.IsAny<Log>())).Returns(1);
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -385,7 +385,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -409,7 +409,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -436,7 +436,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             LogModel modelEnvio = new LogModel();
-            modelEnvio.ip = "ip";
+            modelEnvio.ip = "127.0.0.1";
             modelEnvio.local = "local";
             modelEnvio.usuario = "usuario";
             modelEnvio.data = "24/Jan/2021 16:00:00";
@@ -478,7 +478,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             string resultado = logController.SelectFields(
                 "0",
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -500,10 +500,10 @@ namespace Api_UploadFileLog.Tests.Controllers
         public void SelectFields_DeveRetornarIpInvalido_QuandoIdForInvalido()
         {
             LogController logController = this.CreateTestSubject();
-            string mensagemEsperada = "Id inválido!";
+            string mensagemEsperada = "Ip inválido!";
 
             string resultado = logController.SelectFields(
-                "id",
+                "0",
                 "ip inválido",
                 "local",
                 "usuario",
@@ -529,7 +529,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             string resultado = logController.SelectFields(
                 "0",
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -555,7 +555,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             string resultado = logController.SelectFields(
                 "0",
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",

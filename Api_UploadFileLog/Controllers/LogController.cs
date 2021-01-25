@@ -42,13 +42,8 @@ namespace Api_UploadFileLog.Controllers
             var result = string.Empty;
             try
             {
-                if(!ipAddressValido(ip))
-                {
-                    throw new ArgumentException("Ip inválido!");
-                }
-
                 //Entidade
-                Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+                Log log = new Log(0, ipAddressValido(ip), local, usuario, ConvertDateTime(data), zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
 
                 if (_logRepository.Add(log) > 0)
                 {
@@ -85,7 +80,7 @@ namespace Api_UploadFileLog.Controllers
             var result = string.Empty;
             try
             {
-                Log logModel = new Log(0, log.ip, log.local, log.usuario, ConvertDateTime(log.data), log.zone, log.requisicao, IntTryParseNullable(log.status), IntTryParseNullable(log.time), log.origem, log.software);
+                Log logModel = new Log(0, ipAddressValido(log.ip), log.local, log.usuario, ConvertDateTime(log.data), log.zone, log.requisicao, IntTryParseNullable(log.status), IntTryParseNullable(log.time), log.origem, log.software);
                 if (_logRepository.Add(logModel) > 0)
                 {
                     result = "Inserido com sucesso.";
@@ -125,10 +120,10 @@ namespace Api_UploadFileLog.Controllers
                 Int64.TryParse(id, out outValue);
 
                 //Entidade
-                Log log = new Log(Convert.ToInt64(id), ip, local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+                Log log = new Log(Convert.ToInt64(id), ipAddressValido(ip), local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
                 List<LogModel> logRetorn = _logRepository.SelectWithParameters(log);
 
-                if(logRetorn == null || logRetorn.Count == 0)
+                if (logRetorn == null || logRetorn.Count == 0)
                 {
                     throw new ArgumentException("Sem dados para exibir!");
                 }

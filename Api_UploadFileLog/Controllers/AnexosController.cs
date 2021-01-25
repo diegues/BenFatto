@@ -63,15 +63,21 @@ namespace Api_UploadFileLog.Controllers
                         string time = findData(0, "\"", ref linha);
                         string origem = findData(0, "\"", ref linha);
                         string software = findData(1, "\"", ref linha);
-                        
-                        if(!ipAddressValido(ip))
+
+                        try
+                        {
+                            ip = ipAddressValido(ip);
+                        }
+                        catch (ArgumentException ex)
+                        {
                             lArquivo += "Ip Inválido,";
+                        }
 
                         try
                         {
                             dataArquivo = ConvertDateTime(data);
                         }
-                        catch (ArgumentException ex)
+                        catch (ArgumentException)
                         {
                             lArquivo += "Data Inválida (dd/MMM/yyyy HH:mm:ss),";
                         }

@@ -35,7 +35,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -48,7 +48,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l =>
-                l.ip == "ip" &&
+                l.ip == "127.0.0.1" &&
                 l.local == "local" &&
                 l.usuario == "usuario" &&
                 l.data == DateTime.Parse("24/Jan/2021 16:00:00") &&
@@ -67,7 +67,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             string resultado = logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "data invalida",
@@ -84,14 +84,36 @@ namespace Api_UploadFileLog.Tests.Controllers
                 m.Add(It.Is<Log>(l => l.status == null)),
                 Times.Never());
         }
+        public void Insert_DeveRetornarMensagemDeIpInvalido_QuandoIpEInvalido()
+        {
+            LogController logController = this.CreateTestSubject();
 
+            string resultado = logController.Insert(
+                "ip inválido",
+                "local",
+                "usuario",
+                "24/Jan/2021 16:00:00",
+                "zone",
+                "requisicao",
+                "0",
+                "0",
+                "origem",
+                "software");
+
+            Assert.AreEqual("Ip inválido!", resultado);
+
+            _logRepositoryMock.Verify(m =>
+                m.Add(It.Is<Log>(l => l.status == null)),
+                Times.Never());
+        }
+        
         [TestMethod]
         public void Insert_DeveInserirStatusNulo_QuandoStatusEInvalido()
         {
             LogController logController = this.CreateTestSubject();
 
             string resultado = logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -113,7 +135,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             string resultado = logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -137,7 +159,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             string resultado = logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -159,7 +181,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             string resultado = logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -181,7 +203,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             Assert.ThrowsException<Exception>(() => logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",
@@ -206,7 +228,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
 
             string resultado = logController.Insert(
-                "ip",
+                "127.0.0.1",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",

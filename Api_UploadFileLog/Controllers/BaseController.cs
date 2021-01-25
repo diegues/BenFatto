@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
+using System.Net;
 
 namespace Api_UploadFileLog.Controllers
 {
@@ -11,6 +12,12 @@ namespace Api_UploadFileLog.Controllers
         {
             int outValue;
             return int.TryParse(val, out outValue) ? (int?)outValue : null;
+        }
+
+        protected bool ipAddressValido(string ip)
+        {
+            IPAddress outValue;
+            return IPAddress.TryParse(ip, out outValue);
         }
 
         protected DateTime ConvertDateTime(string date)

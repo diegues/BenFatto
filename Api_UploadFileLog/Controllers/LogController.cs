@@ -42,6 +42,11 @@ namespace Api_UploadFileLog.Controllers
             var result = string.Empty;
             try
             {
+                if(!ipAddressValido(ip))
+                {
+                    throw new ArgumentException("Ip inválido!");
+                }
+
                 //Entidade
                 Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
 

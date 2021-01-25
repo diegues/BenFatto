@@ -48,7 +48,7 @@ namespace Api_UploadFileLog.Repository
                 var affectedRows = _con.Execute(queryInsert, listLog);
                 result = affectedRows;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result = 0;
         }
@@ -129,7 +129,7 @@ namespace Api_UploadFileLog.Repository
             }
             catch (Exception)
             {
-
+                throw new DataException("Erro ao selecionar dados.");
             }
             finally
             {

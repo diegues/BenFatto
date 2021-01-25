@@ -36,9 +36,10 @@ namespace Api_UploadFileLog.Controllers
         [Route("UploadFile")]
         public string PostFile(IFormFile file)
         {
-            var sb = new StringBuilder();
-            var lstlog = new List<Log>();
-            var result = string.Empty;
+            StringBuilder sb = new StringBuilder();
+            List<Log> lstlog = new List<Log>();
+            StringBuilder result = new StringBuilder();
+            int linhaArquivo = 0;
 
             try
             {
@@ -46,6 +47,9 @@ namespace Api_UploadFileLog.Controllers
                 {
                     while (reader.Peek() >= 0)
                     {
+                        DateTime dataArquivo = new DateTime();
+                        linhaArquivo++;
+                        string lArquivo = string.Empty;
                         sb.Clear();
                         sb.AppendLine(reader.ReadLine());
 
@@ -59,24 +63,39 @@ namespace Api_UploadFileLog.Controllers
                         string time = findData(0, "\"", ref linha);
                         string origem = findData(0, "\"", ref linha);
                         string software = findData(1, "\"", ref linha);
+                        
+                        if(!ipAddressValido(ip))
+                            lArquivo += "Ip Inválido,";
 
-                        //Fazer Entidade
-                        Log log = new Log(0, ip, local, usuario, ConvertDateTime(data), ConvertTimeZone(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
-                        lstlog.Add(log);
+                        try
+                        {
+                            dataArquivo = ConvertDateTime(data);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            lArquivo += "Data Inválida (dd/MMM/yyyy HH:mm:ss),";
+                        }
+
+                        if (string.IsNullOrEmpty(lArquivo))
+                        {
+                            lArquivo = lArquivo.Remove(lArquivo.Length - 1);
+                            result.AppendLine(string.Format("Erro Linha {0}: {1}", linhaArquivo, lArquivo));
+                        }
+                        else
+                        {
+                            Log log = new Log(0, ip, local, usuario, dataArquivo, ConvertTimeZone(data), requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
+                            lstlog.Add(log);
+                        }
                     }
                 }
 
-                if (_logRepository.AddList(lstlog) > 0)
+                if (_logRepository.AddList(lstlog) == linhaArquivo)
                 {
-                    result = JsonSerializer.Serialize(lstlog, new JsonSerializerOptions
+                    result.Append(JsonSerializer.Serialize(lstlog, new JsonSerializerOptions
                     {
                         Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
                         WriteIndented = true
-                    });
-                }
-                else
-                {
-                    result = "Erro ao inserir dados.";
+                    }));
                 }
 
             }
@@ -85,7 +104,7 @@ namespace Api_UploadFileLog.Controllers
                 return exc.ToString();
             }
 
-            return result;
+            return result.ToString();
         }
     }
 }

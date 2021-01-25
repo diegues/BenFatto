@@ -76,7 +76,7 @@ namespace Api_UploadFileLog.Controllers
                             lArquivo += "Data Inválida (dd/MMM/yyyy HH:mm:ss),";
                         }
 
-                        if (string.IsNullOrEmpty(lArquivo))
+                        if (!string.IsNullOrEmpty(lArquivo))
                         {
                             lArquivo = lArquivo.Remove(lArquivo.Length - 1);
                             result.AppendLine(string.Format("Erro Linha {0}: {1}", linhaArquivo, lArquivo));

@@ -121,11 +121,8 @@ namespace Api_UploadFileLog.Controllers
                 if (data != null)
                     dataF = ConvertDateTime(data);
 
-                Int64 outValue;
-                if (!Int64.TryParse(id, out outValue))
-                {
-                    throw new ArgumentException("Id inválido!");
-                }
+                Int64 outValue = 0;
+                Int64.TryParse(id, out outValue);
 
                 //Entidade
                 Log log = new Log(Convert.ToInt64(id), ip, local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);

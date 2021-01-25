@@ -497,14 +497,14 @@ namespace Api_UploadFileLog.Tests.Controllers
         }
 
         [TestMethod]
-        public void SelectFields_DeveRetornarIdInvalido_QuandoIdForInvalido()
+        public void SelectFields_DeveRetornarIpInvalido_QuandoIdForInvalido()
         {
             LogController logController = this.CreateTestSubject();
             string mensagemEsperada = "Id inválido!";
 
             string resultado = logController.SelectFields(
-                "id inválido",
-                "ip",
+                "id",
+                "ip inválido",
                 "local",
                 "usuario",
                 "24/Jan/2021 16:00:00",

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Text.Json;
 
 namespace Api_UploadFileLog.Tests.Repository
 {
@@ -229,7 +230,11 @@ namespace Api_UploadFileLog.Tests.Repository
 
             List<LogModel> resultado = repository.SelectWithParameters(new Log());
 
-            CollectionAssert.AreEqual(resultadoRetorno, resultado);
+            string JsonRetornado = JsonSerializer.Serialize(resultado);
+            string JsonRetornoEsperado = JsonSerializer.Serialize(resultadoRetorno);
+
+
+            Assert.AreEqual(JsonRetornoEsperado, JsonRetornado);
         }
 
         [TestMethod]

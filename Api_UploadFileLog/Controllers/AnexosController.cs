@@ -68,7 +68,7 @@ namespace Api_UploadFileLog.Controllers
                         {
                             ip = ipAddressValido(ip);
                         }
-                        catch (ArgumentException ex)
+                        catch (ArgumentException)
                         {
                             lArquivo += "Ip Inválido,";
                         }

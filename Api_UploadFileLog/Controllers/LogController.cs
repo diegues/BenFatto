@@ -37,7 +37,7 @@ namespace Api_UploadFileLog.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Insert")]
-        public string Insert(string ip, string local, string usuario, string data, string zone, string requisicao, string status, string time, string origem, string software)
+        public IActionResult Insert(string ip, string local, string usuario, string data, string zone, string requisicao, string status, string time, string origem, string software)
         {
             var result = string.Empty;
             try
@@ -67,7 +67,7 @@ namespace Api_UploadFileLog.Controllers
                 throw (new Exception(ex.ToString()));
             }
 
-            return result;
+            return new ObjectResult(result);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Api_UploadFileLog.Controllers
         /// </summary>
         [HttpPost]
         [Route("CreateLog")]
-        public string PostCreateLog([FromBody] LogModel log)
+        public IActionResult PostCreateLog([FromBody] LogModel log)
         {
             var result = string.Empty;
             try
@@ -102,14 +102,15 @@ namespace Api_UploadFileLog.Controllers
             {
                 throw (new Exception(ex.ToString()));
             }
-            return result;
+            return new ObjectResult(result);
         }
 
         [HttpPost]
         [Route("SelectFields")]
-        public string SelectFields(string id = null, string ip = null, string local = null, string usuario = null, string data = null, string zone = null, string requisicao = null, string status = null, string time = null, string origem = null, string software = null)
+        public IActionResult SelectFields(string id = null, string ip = null, string local = null, string usuario = null, string data = null, string zone = null, string requisicao = null, string status = null, string time = null, string origem = null, string software = null)
         {
-            var result = string.Empty;
+            IActionResult retorno;
+            List<LogModel> logRetorn = default;
             try
             {
                 DateTime dataF = new DateTime();
@@ -121,29 +122,25 @@ namespace Api_UploadFileLog.Controllers
 
                 //Entidade
                 Log log = new Log(Convert.ToInt64(id), ipAddressValido(ip), local, usuario, dataF, zone, requisicao, IntTryParseNullable(status), IntTryParseNullable(time), origem, software);
-                List<LogModel> logRetorn = _logRepository.SelectWithParameters(log);
+                logRetorn = _logRepository.SelectWithParameters(log);
+
+                retorno = new ObjectResult(logRetorn);
 
                 if (logRetorn == null || logRetorn.Count == 0)
                 {
-                    throw new ArgumentException("Sem dados para exibir!");
+                    retorno = new ObjectResult("Sem dados para exibir!");
                 }
-
-                result = JsonSerializer.Serialize(logRetorn, new JsonSerializerOptions
-                {
-                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                    WriteIndented = true
-                });
             }
             catch (ArgumentException ex)
             {
-                result = ex.Message;
+                retorno = new ObjectResult(ex.Message);
             }
             catch (Exception ex)
             {
-                result = ex.Message.ToString();
+                retorno = new ObjectResult(ex.Message);
             }
 
-            return result;
+            return retorno;
         }
     }
 }

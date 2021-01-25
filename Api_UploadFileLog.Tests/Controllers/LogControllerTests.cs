@@ -66,7 +66,7 @@ namespace Api_UploadFileLog.Tests.Controllers
         {
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult resultado = logController.Insert(
                 "127.0.0.1",
                 "local",
                 "usuario",
@@ -78,7 +78,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual("Data inválida!", resultado);
+            Assert.AreEqual(new ObjectResult("Data inválida!").ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -88,7 +88,7 @@ namespace Api_UploadFileLog.Tests.Controllers
         {
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult resultado = logController.Insert(
                 "ip inválido",
                 "local",
                 "usuario",
@@ -100,7 +100,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual("Ip inválido!", resultado);
+            Assert.AreEqual(new ObjectResult("Ip inválido!").ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -112,7 +112,7 @@ namespace Api_UploadFileLog.Tests.Controllers
         {
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult resultado = logController.Insert(
                 "127.0.0.1",
                 "local",
                 "usuario",
@@ -134,7 +134,7 @@ namespace Api_UploadFileLog.Tests.Controllers
         {
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult IActionResult = logController.Insert(
                 "127.0.0.1",
                 "local",
                 "usuario",
@@ -158,7 +158,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult resultado = logController.Insert(
                 "127.0.0.1",
                 "local",
                 "usuario",
@@ -170,7 +170,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual("Inserido com sucesso.", resultado);
+            Assert.AreEqual(new ObjectResult("Inserido com sucesso.").ToString(), resultado.ToString());
         }
 
         [TestMethod]
@@ -180,7 +180,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult resultado = logController.Insert(
                 "127.0.0.1",
                 "local",
                 "usuario",
@@ -192,7 +192,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual("Erro ao inserir dados.", resultado);
+            Assert.AreEqual(new ObjectResult("Erro ao inserir dados.").ToString(), resultado.ToString());
         }
 
         [TestMethod]
@@ -227,7 +227,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.Insert(
+            IActionResult resultado = logController.Insert(
                 "127.0.0.1",
                 "local",
                 "usuario",
@@ -239,7 +239,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(mensageEsperada, resultado);
+            Assert.AreEqual(new ObjectResult(mensageEsperada).ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.IsAny<Log>()),
@@ -265,7 +265,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l =>
@@ -299,9 +299,9 @@ namespace Api_UploadFileLog.Tests.Controllers
             modelEnvio.origem = "origem";
             modelEnvio.software = "software";
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual("Data inválida!", resultado);
+            Assert.AreEqual(new ObjectResult("Data inválida!").ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -324,7 +324,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             modelEnvio.time = "10";
             modelEnvio.origem = "origem";
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -347,7 +347,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             modelEnvio.time = "time invalido";
             modelEnvio.origem = "origem";
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.time == null)),
@@ -372,9 +372,9 @@ namespace Api_UploadFileLog.Tests.Controllers
             modelEnvio.origem = "origem";
             modelEnvio.software = "software";
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual("Inserido com sucesso.", resultado);
+            Assert.AreEqual(new ObjectResult("Inserido com sucesso.").ToString(), resultado.ToString());
         }
 
         [TestMethod]
@@ -396,9 +396,9 @@ namespace Api_UploadFileLog.Tests.Controllers
             modelEnvio.origem = "origem";
             modelEnvio.software = "software";
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual("Erro ao inserir dados.", resultado);
+            Assert.AreEqual(new ObjectResult("Erro ao inserir dados.").ToString(), resultado.ToString());
         }
 
         [TestMethod]
@@ -447,9 +447,9 @@ namespace Api_UploadFileLog.Tests.Controllers
             modelEnvio.origem = "origem";
             modelEnvio.software = "software";
 
-            string resultado = logController.PostCreateLog(modelEnvio);
+            IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual(mensageEsperada, resultado);
+            Assert.AreEqual(new ObjectResult(mensageEsperada).ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.IsAny<Log>()),
@@ -476,7 +476,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 WriteIndented = true
             });
 
-            string resultado = logController.SelectFields(
+            IActionResult resultado = logController.SelectFields(
                 "0",
                 "127.0.0.1",
                 "local",
@@ -489,7 +489,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(resultadoEsperado, resultado);
+            Assert.AreEqual(new ObjectResult(resultadoEsperado).ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.SelectWithParameters(It.IsAny<Log>()),
@@ -502,7 +502,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
             string mensagemEsperada = "Ip inválido!";
 
-            string resultado = logController.SelectFields(
+            IActionResult resultado = logController.SelectFields(
                 "0",
                 "ip inválido",
                 "local",
@@ -515,7 +515,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(mensagemEsperada, resultado);
+            Assert.AreEqual(new ObjectResult(mensagemEsperada).ToString(), resultado.ToString());
 
         }
 
@@ -527,7 +527,7 @@ namespace Api_UploadFileLog.Tests.Controllers
             LogController logController = this.CreateTestSubject();
             string mensagemEsperada = "Sem dados para exibir!";
 
-            string resultado = logController.SelectFields(
+            IActionResult resultado = logController.SelectFields(
                 "0",
                 "127.0.0.1",
                 "local",
@@ -540,7 +540,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(mensagemEsperada, resultado);
+            Assert.AreEqual(new ObjectResult(mensagemEsperada).ToString(), resultado.ToString());
 
         }
 
@@ -553,7 +553,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             LogController logController = this.CreateTestSubject();
 
-            string resultado = logController.SelectFields(
+            IActionResult resultado = logController.SelectFields(
                 "0",
                 "127.0.0.1",
                 "local",
@@ -566,7 +566,7 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(mensageEsperada, resultado);
+            Assert.AreEqual(new ObjectResult(mensageEsperada).ToString(), resultado.ToString());
 
             _logRepositoryMock.Verify(m =>
                 m.SelectWithParameters(It.IsAny<Log>()),

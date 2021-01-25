@@ -34,7 +34,7 @@ namespace Api_UploadFileLog.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UploadFile")]
-        public string PostFile(IFormFile file)
+        public IActionResult PostFile(IFormFile file)
         {
             StringBuilder sb = new StringBuilder();
             List<Log> lstlog = new List<Log>();
@@ -43,6 +43,9 @@ namespace Api_UploadFileLog.Controllers
 
             try
             {
+                if (!file.FileName.Contains(".log"))
+                    throw new Exception("Arquivo com extensão inválida.");
+
                 using (var reader = new StreamReader(file.OpenReadStream()))
                 {
                     while (reader.Peek() >= 0)
@@ -97,20 +100,18 @@ namespace Api_UploadFileLog.Controllers
 
                 if (_logRepository.AddList(lstlog) == linhaArquivo)
                 {
-                    result.Append(JsonSerializer.Serialize(lstlog, new JsonSerializerOptions
-                    {
-                        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                        WriteIndented = true
-                    }));
+                    return new ObjectResult(lstlog);
+                }
+                else 
+                {
+                    return new ObjectResult(result.ToString());
                 }
 
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                return exc.ToString();
+                return new ObjectResult(ex.Message);
             }
-
-            return result.ToString();
         }
     }
 }

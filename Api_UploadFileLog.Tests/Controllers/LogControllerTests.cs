@@ -78,7 +78,11 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult("Data inválida!").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Data inválida!").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -100,7 +104,11 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult("Ip inválido!").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Ip inválido!").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -170,7 +178,11 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult("Inserido com sucesso.").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Inserido com sucesso.").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
         }
 
         [TestMethod]
@@ -192,7 +204,11 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult("Erro ao inserir dados.").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Erro ao inserir dados.").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
         }
 
         [TestMethod]
@@ -239,7 +255,12 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult(mensageEsperada).ToString(), resultado.ToString());
+
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult(mensageEsperada).Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.IsAny<Log>()),
@@ -301,7 +322,11 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual(new ObjectResult("Data inválida!").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Data inválida!").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.Is<Log>(l => l.status == null)),
@@ -374,7 +399,11 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual(new ObjectResult("Inserido com sucesso.").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Inserido com sucesso.").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
         }
 
         [TestMethod]
@@ -398,7 +427,11 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual(new ObjectResult("Erro ao inserir dados.").ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult("Erro ao inserir dados.").Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
         }
 
         [TestMethod]
@@ -449,7 +482,11 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             IActionResult resultado = logController.PostCreateLog(modelEnvio);
 
-            Assert.AreEqual(new ObjectResult(mensageEsperada).ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult(mensageEsperada).Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.Add(It.IsAny<Log>()),
@@ -470,11 +507,7 @@ namespace Api_UploadFileLog.Tests.Controllers
 
             LogController logController = this.CreateTestSubject();
 
-            string resultadoEsperado = JsonSerializer.Serialize(lstEnvio, new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true
-            });
+            List<LogModel> resultadoEsperado = lstEnvio;
 
             IActionResult resultado = logController.SelectFields(
                 "0",
@@ -489,7 +522,11 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult(resultadoEsperado).ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult(resultadoEsperado).Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.SelectWithParameters(It.IsAny<Log>()),
@@ -515,7 +552,12 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult(mensagemEsperada).ToString(), resultado.ToString());
+
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult(mensagemEsperada).Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
         }
 
@@ -540,7 +582,12 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult(mensagemEsperada).ToString(), resultado.ToString());
+
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult(mensagemEsperada).Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
         }
 
@@ -548,8 +595,8 @@ namespace Api_UploadFileLog.Tests.Controllers
         [TestMethod]
         public void SelectFields_DeveExcecaoDeDados_QuandoExcecaoDeDadosAcontecer()
         {
-            string mensageEsperada = "qualquer mensagem";
-            _logRepositoryMock.Setup(m => m.SelectWithParameters(It.IsAny<Log>())).Throws(new Exception(mensageEsperada));
+            string mensagemEsperada = "qualquer mensagem";
+            _logRepositoryMock.Setup(m => m.SelectWithParameters(It.IsAny<Log>())).Throws(new Exception(mensagemEsperada));
 
             LogController logController = this.CreateTestSubject();
 
@@ -566,7 +613,11 @@ namespace Api_UploadFileLog.Tests.Controllers
                 "origem",
                 "software");
 
-            Assert.AreEqual(new ObjectResult(mensageEsperada).ToString(), resultado.ToString());
+            Assert.AreEqual(typeof(ObjectResult), resultado.GetType());
+
+            string jsonRetorno = JsonSerializer.Serialize((resultado as ObjectResult).Value);
+            string jsonEsperado = JsonSerializer.Serialize(new ObjectResult(mensagemEsperada).Value);
+            Assert.AreEqual(jsonEsperado, jsonRetorno);
 
             _logRepositoryMock.Verify(m =>
                 m.SelectWithParameters(It.IsAny<Log>()),
